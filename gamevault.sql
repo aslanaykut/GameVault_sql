@@ -1,23 +1,21 @@
--- UTF-8 Encoding
-
 -- =====================================================
 -- GAMEVAULT DATABASE
--- Veritabaný Ýþlemleri Ödevi
--- PostgreSQL Uyumlu SQL Dosyasý
+-- Veritabanı İşlemleri Ödevi
+-- PostgreSQL Uyumlu SQL Dosyası
 -- =====================================================
--- Ýçerik:
--- 1) Tablo Oluþturma
+-- İçerik:
+-- 1) Tablo Oluşturma
 -- 2) Veri Ekleme
 -- 3) Güncelleme / Silme
--- 4) Raporlama Sorgularý
+-- 4) Raporlama Sorguları
 -- =====================================================
 
 
 -- =====================================================
--- 1. TABLOLARIN OLUÞTURULMASI
+-- 1. TABLOLARIN OLUŞTURULMASI
 -- =====================================================
 
--- Geliþtirici firmalar tablosu
+-- Geliştirici firmalar tablosu
 CREATE TABLE developers (
     id SERIAL PRIMARY KEY,
     company_name VARCHAR(100) NOT NULL,
@@ -45,7 +43,7 @@ CREATE TABLE genres (
     description VARCHAR(255)
 );
 
--- Oyun - Tür iliþki tablosu
+-- Oyun - Tür ilişki tablosu
 CREATE TABLE games_genres (
     id SERIAL PRIMARY KEY,
     game_id INT,
@@ -60,10 +58,10 @@ CREATE TABLE games_genres (
 
 
 -- =====================================================
--- 2. VERÝ EKLEME ÝÞLEMLERÝ
+-- 2. VERİ EKLEME İŞLEMLERİ
 -- =====================================================
 
--- Geliþtirici firmalar
+-- Geliştirici firmalar
 INSERT INTO developers (company_name, country, founded_year) VALUES
 ('CD Projekt Red', 'Poland', 2002),
 ('Rockstar Games', 'USA', 1998),
@@ -92,7 +90,7 @@ INSERT INTO games (title, price, release_date, rating, developer_id) VALUES
 ('Assassin’s Creed Valhalla', 649.99, '2020-11-10', 8.3, 5),
 ('Far Cry 6', 599.99, '2021-10-07', 7.9, 5);
 
--- Oyun - Tür eþleþtirmeleri
+-- Oyun - Tür eşleştirmeleri
 INSERT INTO games_genres (game_id, genre_id) VALUES
 (1, 1), (1, 2),
 (2, 1), (2, 2),
@@ -107,19 +105,19 @@ INSERT INTO games_genres (game_id, genre_id) VALUES
 
 
 -- =====================================================
--- 3. GÜNCELLEME ve SÝLME ÝÞLEMLERÝ
+-- 3. GÜNCELLEME ve SİLME İŞLEMLERİ
 -- =====================================================
 
--- Tüm oyunlara %10 indirim uygulanmasý
+-- Tüm oyunlara %10 indirim uygulanması
 UPDATE games
 SET price = price * 0.90;
 
--- Cyberpunk 2077 oyununun puanýný güncelleme
+-- Cyberpunk 2077 oyununun puanını güncelleme
 UPDATE games
 SET rating = 9.0
 WHERE title = 'Cyberpunk 2077';
 
--- CS:GO oyununu silme (önce iliþki tablosundan)
+-- CS:GO oyununu silme (önce ilişki tablosundan)
 DELETE FROM games_genres
 WHERE game_id = (
     SELECT id FROM games WHERE title = 'CS:GO'
@@ -134,14 +132,14 @@ WHERE title = 'CS:GO';
 -- 4. RAPORLAMA SORGULARI (SELECT)
 -- =====================================================
 
--- Oyunlarý geliþtirici firmalarý ile birlikte listeleme
+-- Oyunları geliştirici firmaları ile birlikte listeleme
 SELECT
     g.title AS game_title,
     d.company_name AS developer
 FROM games g
 JOIN developers d ON g.developer_id = d.id;
 
--- RPG türündeki oyunlarý listeleme
+-- RPG türündeki oyunları listeleme
 SELECT
     g.title
 FROM games g
@@ -149,23 +147,24 @@ JOIN games_genres gg ON g.id = gg.game_id
 JOIN genres gr ON gg.genre_id = gr.id
 WHERE gr.name = 'RPG';
 
--- Fiyatý 500 TL üzerindeki oyunlar
+-- Fiyatı 500 TL üzerindeki oyunlar
 SELECT
     title, price
 FROM games
 WHERE price > 500;
 
--- Adýnda "War" geçen oyunlar
+-- Adında "War" geçen oyunlar
 SELECT
     title
 FROM games
 WHERE title ILIKE '%War%';
 
--- En yüksek puanlý oyun
+-- En yüksek puanlı oyun
 SELECT
     title, rating
 FROM games
 ORDER BY rating DESC
 LIMIT 1;
+
 
 
