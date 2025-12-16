@@ -1,67 +1,67 @@
 -- =====================================================
 -- GAMEVAULT DATABASE
--- Veritabaný Ýþlemleri Ödevi
--- PostgreSQL Uyumlu SQL Dosyasý
+-- VeritabanÃ½ ÃÃ¾lemleri Ã–devi
+-- PostgreSQL Uyumlu SQL DosyasÃ½
 -- =====================================================
--- Ýçerik:
--- 1) Tablo Oluþturma
+-- ÃÃ§erik:
+-- 1) Tablo OluÃ¾turma
 -- 2) Veri Ekleme
--- 3) Güncelleme / Silme
--- 4) Raporlama Sorgularý
+-- 3) GÃ¼ncelleme / Silme
+-- 4) Raporlama SorgularÃ½
 -- =====================================================
 
 
 -- =====================================================
--- 1. TABLOLARIN OLUÞTURULMASI
+-- 1. TABLOLARIN OLUÃžTURULMASI
 -- =====================================================
 
--- Geliþtirici firmalar tablosu
+-- GeliÃ¾tirici firmalar tablosu
 CREATE TABLE developers (
-    id SERIAL PRIMARY KEY,
-    company_name VARCHAR(100) NOT NULL,
-    country VARCHAR(50),
-    founded_year INT
+Â  Â  id SERIAL PRIMARY KEY,
+Â  Â  company_name VARCHAR(100) NOT NULL,
+Â  Â  country VARCHAR(50),
+Â  Â  founded_year INT
 );
 
 -- Oyunlar tablosu
 CREATE TABLE games (
-    id SERIAL PRIMARY KEY,
-    title VARCHAR(150) NOT NULL,
-    price DECIMAL(8,2),
-    release_date DATE,
-    rating DECIMAL(3,1),
-    developer_id INT,
-    CONSTRAINT fk_developer
-        FOREIGN KEY (developer_id)
-        REFERENCES developers(id)
+Â  Â  id SERIAL PRIMARY KEY,
+Â  Â  title VARCHAR(150) NOT NULL,
+Â  Â  price DECIMAL(8,2),
+Â  Â  release_date DATE,
+Â  Â  rating DECIMAL(3,1),
+Â  Â  developer_id INT,
+Â  Â  CONSTRAINT fk_developer
+Â  Â  Â  Â  FOREIGN KEY (developer_id)
+Â  Â  Â  Â  REFERENCES developers(id)
 );
 
--- Oyun türleri tablosu
+-- Oyun tÃ¼rleri tablosu
 CREATE TABLE genres (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    description VARCHAR(255)
+Â  Â  id SERIAL PRIMARY KEY,
+Â  Â  name VARCHAR(50) NOT NULL,
+Â  Â  description VARCHAR(255)
 );
 
--- Oyun - Tür iliþki tablosu
+-- Oyun - TÃ¼r iliÃ¾ki tablosu
 CREATE TABLE games_genres (
-    id SERIAL PRIMARY KEY,
-    game_id INT,
-    genre_id INT,
-    CONSTRAINT fk_game
-        FOREIGN KEY (game_id)
-        REFERENCES games(id),
-    CONSTRAINT fk_genre
-        FOREIGN KEY (genre_id)
-        REFERENCES genres(id)
+Â  Â  id SERIAL PRIMARY KEY,
+Â  Â  game_id INT,
+Â  Â  genre_id INT,
+Â  Â  CONSTRAINT fk_game
+Â  Â  Â  Â  FOREIGN KEY (game_id)
+Â  Â  Â  Â  REFERENCES games(id),
+Â  Â  CONSTRAINT fk_genre
+Â  Â  Â  Â  FOREIGN KEY (genre_id)
+Â  Â  Â  Â  REFERENCES genres(id)
 );
 
 
 -- =====================================================
--- 2. VERÝ EKLEME ÝÞLEMLERÝ
+-- 2. VERÃ EKLEME ÃÃžLEMLERÃ
 -- =====================================================
 
--- Geliþtirici firmalar
+-- GeliÃ¾tirici firmalar
 INSERT INTO developers (company_name, country, founded_year) VALUES
 ('CD Projekt Red', 'Poland', 2002),
 ('Rockstar Games', 'USA', 1998),
@@ -69,7 +69,7 @@ INSERT INTO developers (company_name, country, founded_year) VALUES
 ('Valve', 'USA', 1996),
 ('Ubisoft', 'France', 1986);
 
--- Oyun türleri
+-- Oyun tÃ¼rleri
 INSERT INTO genres (name, description) VALUES
 ('RPG', 'Role Playing Game'),
 ('Open World', 'Open world exploration games'),
@@ -87,10 +87,10 @@ INSERT INTO games (title, price, release_date, rating, developer_id) VALUES
 ('Doom Eternal', 349.99, '2020-03-20', 8.9, 3),
 ('Half-Life 2', 199.99, '2004-11-16', 9.6, 4),
 ('CS:GO', 0.00, '2012-08-21', 8.5, 4),
-('Assassin’s Creed Valhalla', 649.99, '2020-11-10', 8.3, 5),
+('Assassinâ€™s Creed Valhalla', 649.99, '2020-11-10', 8.3, 5),
 ('Far Cry 6', 599.99, '2021-10-07', 7.9, 5);
 
--- Oyun - Tür eþleþtirmeleri
+-- Oyun - TÃ¼r eÃ¾leÃ¾tirmeleri
 INSERT INTO games_genres (game_id, genre_id) VALUES
 (1, 1), (1, 2),
 (2, 1), (2, 2),
@@ -105,22 +105,22 @@ INSERT INTO games_genres (game_id, genre_id) VALUES
 
 
 -- =====================================================
--- 3. GÜNCELLEME ve SÝLME ÝÞLEMLERÝ
+-- 3. GÃœNCELLEME ve SÃLME ÃÃžLEMLERÃ
 -- =====================================================
 
--- Tüm oyunlara %10 indirim uygulanmasý
+-- TÃ¼m oyunlara %10 indirim uygulanmasÃ½
 UPDATE games
 SET price = price * 0.90;
 
--- Cyberpunk 2077 oyununun puanýný güncelleme
+-- Cyberpunk 2077 oyununun puanÃ½nÃ½ gÃ¼ncelleme
 UPDATE games
 SET rating = 9.0
 WHERE title = 'Cyberpunk 2077';
 
--- CS:GO oyununu silme (önce iliþki tablosundan)
+-- CS:GO oyununu silme (Ã¶nce iliÃ¾ki tablosundan)
 DELETE FROM games_genres
 WHERE game_id = (
-    SELECT id FROM games WHERE title = 'CS:GO'
+Â  Â  SELECT id FROM games WHERE title = 'CS:GO'
 );
 
 -- CS:GO oyununu games tablosundan silme
@@ -132,36 +132,36 @@ WHERE title = 'CS:GO';
 -- 4. RAPORLAMA SORGULARI (SELECT)
 -- =====================================================
 
--- Oyunlarý geliþtirici firmalarý ile birlikte listeleme
+-- OyunlarÃ½ geliÃ¾tirici firmalarÃ½ ile birlikte listeleme
 SELECT
-    g.title AS game_title,
-    d.company_name AS developer
+Â  Â  g.title AS game_title,
+Â  Â  d.company_name AS developer
 FROM games g
 JOIN developers d ON g.developer_id = d.id;
 
--- RPG türündeki oyunlarý listeleme
+-- RPG tÃ¼rÃ¼ndeki oyunlarÃ½ listeleme
 SELECT
-    g.title
+Â  Â  g.title
 FROM games g
 JOIN games_genres gg ON g.id = gg.game_id
 JOIN genres gr ON gg.genre_id = gr.id
 WHERE gr.name = 'RPG';
 
--- Fiyatý 500 TL üzerindeki oyunlar
+-- FiyatÃ½ 500 TL Ã¼zerindeki oyunlar
 SELECT
-    title, price
+Â  Â  title, price
 FROM games
 WHERE price > 500;
 
--- Adýnda "War" geçen oyunlar
+-- AdÃ½nda "War" geÃ§en oyunlar
 SELECT
-    title
+Â  Â  title
 FROM games
 WHERE title ILIKE '%War%';
 
--- En yüksek puanlý oyun
+-- En yÃ¼ksek puanlÃ½ oyun
 SELECT
-    title, rating
+Â  Â  title, rating
 FROM games
 ORDER BY rating DESC
 LIMIT 1;
