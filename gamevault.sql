@@ -1,3 +1,5 @@
+-- UTF-8 Encoding
+
 -- =====================================================
 -- GAMEVAULT DATABASE
 -- Veritabaný Ýþlemleri Ödevi
@@ -165,4 +167,5 @@ SELECT
 FROM games
 ORDER BY rating DESC
 LIMIT 1;
+
 
